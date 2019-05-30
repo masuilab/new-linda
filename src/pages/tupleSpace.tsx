@@ -4,11 +4,6 @@ import LindaClient from '../linda-client';
 import { Tuple } from '../interfaces';
 
 type Props = {};
-type State = {
-  tuples: Array<any>;
-  watchingTuple: any;
-  tupleSpaceName: string;
-};
 
 const TupleSpace = (props: Props) => {
   const tupleSpaceName = location.pathname.substring(1);
@@ -25,10 +20,11 @@ const TupleSpace = (props: Props) => {
   lindaClient.connect('http://new-linda.herokuapp.com', 'masuilab');
   useEffect(() => {
     lindaClient.watch(watchingTuple, resData => {
-      setTuples([resData._payload, ...tuples]);
+      const newTuples = [resData._payload, ...tuples];
+      tuples.push(resData._payload);
+      setTuples(newTuples);
     });
-    return () => {};
-  });
+  }, []);
   return (
     <div>
       <h1>{`${tupleSpaceName}/${JSON.stringify(watchingTuple)}`}</h1>
