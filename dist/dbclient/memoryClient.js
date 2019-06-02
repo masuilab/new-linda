@@ -36,25 +36,9 @@ export default class storageClient {
     }
     async get(operation) {
         for (const t of this.tupleSpace) {
-            let result = isMatch(t._payload, operation._payload);
-            // TODO: テスト あとで消す
-            // console.log(JSON.stringify(diff(t._payload, operation._payload)));
-            //  console.log(JSON.stringify(diff));
-            // const diff = observableDiff(t._payload, operation._payload);
-            // console.log(JSON.stringify(diff));
-            // const notMatchedDiff = diff.filter(ele => {
-            //   if (ele.kind === 'N' || ele.kind === 'A') {
-            //     return true;
-            //   } else if (ele.kind === 'E' && Object.keys(ele.rhs).length !== 0) {
-            //     return true;
-            //   }
-            //   return false;
-            // });
-            // console.log(JSON.stringify(notMatchedDiff));
-            console.log(result);
+            const result = isMatch(t._payload, operation._payload);
             if (result.isMatched) {
-                // if (notMatchedDiff.length === 0) {
-                let resData = Object.assign(t, {
+                const resData = Object.assign(t, {
                     _isMatched: true,
                 });
                 return resData;
