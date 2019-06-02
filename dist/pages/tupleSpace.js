@@ -16,10 +16,11 @@ const TupleSpace = (props) => {
     lindaClient.connect('http://new-linda.herokuapp.com', 'masuilab');
     useEffect(() => {
         lindaClient.watch(watchingTuple, resData => {
-            setTuples([resData._payload, ...tuples]);
+            const newTuples = [resData._payload, ...tuples];
+            tuples.push(resData._payload);
+            setTuples(newTuples);
         });
-        return () => { };
-    });
+    }, []);
     return (React.createElement("div", null,
         React.createElement("h1", null, `${tupleSpaceName}/${JSON.stringify(watchingTuple)}`),
         React.createElement("h2", null, 'write'),

@@ -1,4 +1,5 @@
 import memoryDB from '../db/memoryDB';
+import isMatch from '../util/isMatch';
 export default class storageClient {
     constructor(tupleSpaceName) {
         this.tupleSpaceName = tupleSpaceName;
@@ -35,16 +36,32 @@ export default class storageClient {
     }
     async get(operation) {
         for (const t of this.tupleSpace) {
-            let result = this.isMuch(t._payload, operation._payload);
-            if (result.isMuched) {
+            let result = isMatch(t._payload, operation._payload);
+            // TODO: テスト あとで消す
+            // console.log(JSON.stringify(diff(t._payload, operation._payload)));
+            //  console.log(JSON.stringify(diff));
+            // const diff = observableDiff(t._payload, operation._payload);
+            // console.log(JSON.stringify(diff));
+            // const notMatchedDiff = diff.filter(ele => {
+            //   if (ele.kind === 'N' || ele.kind === 'A') {
+            //     return true;
+            //   } else if (ele.kind === 'E' && Object.keys(ele.rhs).length !== 0) {
+            //     return true;
+            //   }
+            //   return false;
+            // });
+            // console.log(JSON.stringify(notMatchedDiff));
+            console.log(result);
+            if (result.isMatched) {
+                // if (notMatchedDiff.length === 0) {
                 let resData = Object.assign(t, {
-                    _isMuched: true,
+                    _isMatched: true,
                 });
                 return resData;
             }
         }
         return {
-            _isMuched: false,
+            _isMatched: false,
             _id: null,
             _payload: null,
             _time: null,
@@ -53,16 +70,5 @@ export default class storageClient {
     }
     async delete(id) {
         this.tupleSpace.splice(id, 1);
-    }
-    isMuch(targetTuple, searchTuple) {
-        for (let operationKey in searchTuple) {
-            if (!targetTuple[operationKey]) {
-                return { isMuched: false, res: null };
-            }
-            else if (targetTuple[operationKey] != searchTuple[operationKey]) {
-                return { isMuched: false, res: null };
-            }
-        }
-        return { isMuched: true, res: targetTuple };
     }
 }

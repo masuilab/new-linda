@@ -6,7 +6,7 @@ import socketIO from 'socket.io';
 import { createServer } from 'http';
 import Linda from './linda';
 import routeIndex from './routes';
-dotenv.load();
+dotenv.config();
 const PORT = Number(process.env.PORT) || 7777;
 const options = {
     cookie: false,

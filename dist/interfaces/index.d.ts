@@ -10,7 +10,7 @@ export interface LindaMatchedResponse {
     _where: string;
     _time: number;
     _id: number;
-    _isMuched?: true;
+    _isMatched?: true;
     _from?: string;
 }
 export interface LindaNotMatchedResponse {
@@ -18,7 +18,7 @@ export interface LindaNotMatchedResponse {
     _where: string;
     _time: null;
     _id: null;
-    _isMuched?: false;
+    _isMatched?: false;
     _from?: string;
 }
 export interface LindaCallback {
@@ -35,10 +35,10 @@ export declare type TupleInfo = {
     _id: number | any;
 };
 export declare type Tuple = {
-    [key: string]: number | string | boolean | Object;
+    [key: string]: number | string | boolean | Tuple;
 };
-export declare type IsMuchResponse = {
-    isMuched: boolean;
+export declare type IsMatchResponse = {
+    isMatched: boolean;
     res: Tuple | null;
 };
 export declare type InsertData = {
@@ -54,7 +54,7 @@ export declare type SavedData = {
     _payload: Object;
 };
 export declare type ResponseTuple = {
-    _isMuched: boolean;
+    _isMatched: boolean;
     _time: number;
     _from: string;
     _id: number;

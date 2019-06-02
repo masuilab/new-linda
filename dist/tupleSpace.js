@@ -1,5 +1,6 @@
 import { EventEmitter2 } from 'eventemitter2';
 import storageClient from './dbclient/memoryClient';
+import isMatch from './util/isMatch';
 export default class tupleSpace {
     constructor(tupleSpaceName) {
         this.emitter = new EventEmitter2({
@@ -27,15 +28,15 @@ export default class tupleSpace {
     }
     async take(operation, callback) {
         let resData = await this.storage.get(operation);
-        if (resData._isMuched) {
+        if (resData._isMatched) {
             await this.storage.delete(resData._id);
         }
         callback(resData);
     }
     watch(operation, callback) {
         this.emitter.on('_writeData', (eventTuple) => {
-            let result = this.storage.isMuch(eventTuple._payload, operation._payload);
-            if (result.isMuched && result.res) {
+            let result = isMatch(eventTuple._payload, operation._payload);
+            if (result.isMatched && result.res) {
                 const resData = {
                     _time: Date.now(),
                     _payload: result.res,

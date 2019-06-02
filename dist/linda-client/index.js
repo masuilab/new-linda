@@ -7,20 +7,25 @@ export default class LindaClient {
         this.socket = io(url);
         this.tupleSpaceName = tsName;
     }
-    async read(tuple) {
+    read(tuple) {
         let readOperation = {
             _payload: tuple,
             _where: this.tupleSpaceName,
             _type: 'read',
         };
-        if (this.socket) {
-            this.socket.on('_read_response', (resData) => {
-                return resData;
-            });
-            await this.socket.emit('_operation', readOperation);
-        }
+        return new Promise((resolve, reject) => {
+            if (this.socket) {
+                this.socket.on('_read_response', (resData) => {
+                    resolve(resData);
+                });
+                this.socket.emit('_operation', readOperation);
+            }
+            else {
+                reject();
+            }
+        });
     }
-    async write(tuple) {
+    write(tuple) {
         let writeOperation = {
             _payload: tuple,
             _where: this.tupleSpaceName,
@@ -29,25 +34,35 @@ export default class LindaClient {
                 ? tuple._from
                 : undefined,
         };
-        if (this.socket) {
-            this.socket.on('_write_response', (resData) => {
-                return resData;
-            });
-            await this.socket.emit('_operation', writeOperation);
-        }
+        return new Promise((resolve, reject) => {
+            if (this.socket) {
+                this.socket.on('_write_response', (resData) => {
+                    resolve(resData);
+                });
+                this.socket.emit('_operation', writeOperation);
+            }
+            else {
+                reject();
+            }
+        });
     }
-    async take(tuple) {
+    take(tuple) {
         let takeOperation = {
             _payload: tuple,
             _where: this.tupleSpaceName,
             _type: 'take',
         };
-        if (this.socket) {
-            this.socket.on('_take_response', (resData) => {
-                return resData;
-            });
-            await this.socket.emit('_operation', takeOperation);
-        }
+        return new Promise((resolve, reject) => {
+            if (this.socket) {
+                this.socket.on('_take_response', (resData) => {
+                    resolve(resData);
+                });
+                this.socket.emit('_operation', takeOperation);
+            }
+            else {
+                reject();
+            }
+        });
     }
     watch(tuple, callback) {
         let watchOperation = {
