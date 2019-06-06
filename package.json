@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "NODE_ENV=development DEBUG=server:*,nodemon:* nodemon",
-    "start": "node dist/app.js",
+    "start": "npm run build && node dist/app.js",
     "build": "npm run build:server && npm run build:client",
     "build:server": "tsc --outDir ./dist",
     "build:client": "webpack"
