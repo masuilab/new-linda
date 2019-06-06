@@ -25,7 +25,8 @@ var TupleSpace = function (props) {
     });
     var lindaClient = new linda_client_1.default();
     var _a = react_1.useState([]), tuples = _a[0], setTuples = _a[1];
-    lindaClient.connect('http://new-linda.herokuapp.com', 'masuilab');
+    var tsName = location.pathname.substring(1);
+    lindaClient.connect('http://new-linda.herokuapp.com', tsName);
     react_1.useEffect(function () {
         lindaClient.watch(watchingTuple, function (resData) {
             var newTuples = [resData._payload].concat(tuples);
