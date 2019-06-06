@@ -1,13 +1,25 @@
-import * as express from 'express';
-const router = express.Router();
-import * as fs from 'fs';
-import * as path from 'path';
-import app from '../app';
-router.get('/:tupleSpaceName/:operation', (req, res) => {
+"use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var express = __importStar(require("express"));
+var router = express.Router();
+var fs = __importStar(require("fs"));
+var path = __importStar(require("path"));
+var app_1 = __importDefault(require("../app"));
+router.get('/:tupleSpaceName/:operation', function (req, res) {
     if (req.params.tupleSpaceName === '_js') {
         switch (req.params.operation) {
             case 'linda-client.js':
-                fs.readFile(path.join(__dirname, '../../public/js/lindaClient.js'), (err, data) => {
+                fs.readFile(path.join(__dirname, '../../public/js/lindaClient.js'), function (err, data) {
                     if (err)
                         throw 'fs read error';
                     res.setHeader('Content-Type', 'application/javascript');
@@ -21,26 +33,26 @@ router.get('/:tupleSpaceName/:operation', (req, res) => {
         }
     }
     else {
-        const linda = app.get('linda');
-        const ts = linda.tupleSpace(req.params.tupleSpaceName);
-        const operation = {
+        var linda = app_1.default.get('linda');
+        var ts = linda.tupleSpace(req.params.tupleSpaceName);
+        var operation = {
             _payload: req.query,
             _type: req.params.operation,
             _where: req.params.tupleSpaceName,
         };
         switch (req.params.operation) {
             case 'read':
-                ts.read(operation, (Data) => {
+                ts.read(operation, function (Data) {
                     res.send(Data);
                 });
                 break;
             case 'take':
-                ts.take(operation, (Data) => {
+                ts.take(operation, function (Data) {
                     res.send(Data);
                 });
                 break;
             case 'write':
-                ts.write(operation, (Data) => {
+                ts.write(operation, function (Data) {
                     res.send(Data);
                 });
                 break;
@@ -53,10 +65,10 @@ router.get('/:tupleSpaceName/:operation', (req, res) => {
         }
     }
 });
-router.get('/', (req, res) => {
+router.get('/', function (req, res) {
     res.render('index');
 });
-router.get('/:tupleSpaceName', (req, res) => {
+router.get('/:tupleSpaceName', function (req, res) {
     if (req.params.tupleSpaceName === '_js') {
         // 配布する静的ファイルの説明ページ
         res.render('jsIndex');
@@ -68,11 +80,11 @@ router.get('/:tupleSpaceName', (req, res) => {
         });
     }
 });
-router.post('/:tupleSpaceName', (req, res) => {
-    const linda = app.get('linda');
-    let ts = linda.tupleSpace(req.params.tupleSpaceName);
-    ts.write(req.body, resData => {
+router.post('/:tupleSpaceName', function (req, res) {
+    var linda = app_1.default.get('linda');
+    var ts = linda.tupleSpace(req.params.tupleSpaceName);
+    ts.write(req.body, function (resData) {
         res.send({ status: 'ok', tuple: resData });
     });
 });
-export default router;
+exports.default = router;

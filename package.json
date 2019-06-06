@@ -8,7 +8,7 @@
     "start:dev": "NODE_ENV=development DEBUG=server:*,nodemon:* nodemon",
     "start": "npm run build && node dist/app.js",
     "build": "npm run build:server && npm run build:client",
-    "build:server": "tsc --outDir ./dist",
+    "build:server": "tsc",
     "build:client": "webpack"
   },
   "repository": {

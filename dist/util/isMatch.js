@@ -1,8 +1,10 @@
-import { observableDiff } from 'deep-diff';
-const isMatch = (targetTuple, searchTuple) => {
-    const diffs2 = observableDiff(targetTuple, searchTuple, d => { });
-    const notMatchedDiff = diffs2 &&
-        diffs2.filter(ele => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var deep_diff_1 = require("deep-diff");
+var isMatch = function (targetTuple, searchTuple) {
+    var diffs2 = deep_diff_1.observableDiff(targetTuple, searchTuple, function (d) { });
+    var notMatchedDiff = diffs2 &&
+        diffs2.filter(function (ele) {
             if (ele.kind === 'N' || ele.kind === 'A') {
                 return true;
             }
@@ -15,4 +17,4 @@ const isMatch = (targetTuple, searchTuple) => {
         ? { isMatched: true, res: targetTuple }
         : { isMatched: false, res: null };
 };
-export default isMatch;
+exports.default = isMatch;
