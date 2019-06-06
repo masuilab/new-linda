@@ -18,7 +18,7 @@ const TupleSpace = (props: Props) => {
   const lindaClient = new LindaClient();
   const [tuples, setTuples] = useState<(Tuple | null)[]>([]);
   const tsName = location.pathname.substring(1);
-  lindaClient.connect('http://new-linda.herokuapp.com', tsName);
+  lindaClient.connect(location.origin, tsName);
   useEffect(() => {
     lindaClient.watch(watchingTuple, resData => {
       const newTuples = [resData._payload, ...tuples];

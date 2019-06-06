@@ -80,11 +80,45 @@ router.get('/:tupleSpaceName', function (req, res) {
         });
     }
 });
-router.post('/:tupleSpaceName', function (req, res) {
+var isValidLindaOperation = function (operation) {
+    var keys = Object.keys(operation);
+    if (!operation)
+        return false;
+    if (!keys.includes('_payload') ||
+        !keys.includes('_where') ||
+        !keys.includes('_type')) {
+        return false;
+    }
+    return (typeof operation._where === 'string' &&
+        ['read', 'write', 'take'].includes(operation._type));
+};
+router.post('/', function (req, res) {
     var linda = app_1.default.get('linda');
-    var ts = linda.tupleSpace(req.params.tupleSpaceName);
-    ts.write(req.body, function (resData) {
-        res.send({ status: 'ok', tuple: resData });
-    });
+    if (isValidLindaOperation(req.body)) {
+        var ts = linda.tupleSpace(req.body._where);
+        switch (req.body._type) {
+            case 'write':
+                ts.write(req.body, function (resData) {
+                    res.send({ status: 'ok', resData: resData });
+                });
+                break;
+            case 'read':
+                ts.read(req.body, function (resData) {
+                    res.send({ status: 'ok', resData: resData });
+                });
+                break;
+            case 'take':
+                ts.take(req.body, function (resData) {
+                    res.send({ status: 'ok', resData: resData });
+                });
+                break;
+            default:
+                res.send({ status: 'invalid operation' });
+                break;
+        }
+    }
+    else {
+        res.send({ status: 'invalid operation' });
+    }
 });
 exports.default = router;

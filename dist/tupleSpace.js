@@ -68,7 +68,6 @@ var tupleSpace = /** @class */ (function () {
                     case 0: return [4 /*yield*/, this.storage.insert(operation)];
                     case 1:
                         resData = _a.sent();
-                        // this.emitter.emit("_writeData", operation);
                         this.emitter.emit('_writeData', resData);
                         callback(resData);
                         return [2 /*return*/];
@@ -113,6 +112,7 @@ var tupleSpace = /** @class */ (function () {
     tupleSpace.prototype.watch = function (operation, callback) {
         var _this = this;
         this.emitter.on('_writeData', function (eventTuple) {
+            console.log(eventTuple);
             var result = isMatch_1.default(eventTuple._payload, operation._payload);
             if (result.isMatched && result.res) {
                 var resData = {
