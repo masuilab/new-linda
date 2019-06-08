@@ -123,6 +123,7 @@ router.post('/', (req: express.Request, res: express.Response) => {
         break;
     }
   } else {
+    console.log(req.body);
     res.send({ status: 'invalid operation' });
   }
 });
