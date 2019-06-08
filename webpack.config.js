@@ -3,6 +3,7 @@ const env =
   process.env.NODE_ENV === 'production' ? process.env.NODE_ENV : 'development';
 
 module.exports = {
+  watch: env === 'development',
   mode: env,
   entry: {
     tupleSpace: './src/pages/tupleSpace.tsx',
