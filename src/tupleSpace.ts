@@ -59,7 +59,6 @@ export default class tupleSpace {
 
   watch(operation: LindaOperation, callback: LindaCallback): void {
     this.emitter.on('_writeData', (eventTuple: LindaMatchedResponse) => {
-      console.log(eventTuple);
       let result: IsMatchResponse = isMatch(
         eventTuple._payload,
         operation._payload,
