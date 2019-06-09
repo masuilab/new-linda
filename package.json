@@ -9,7 +9,8 @@
     "start": "node dist/app.js",
     "build": "npm run build:server && npm run build:client",
     "build:server": "tsc",
-    "build:client": "webpack"
+    "build:client": "webpack",
+    "build:client:dev": "NODE_ENV=development webpack"
   },
   "repository": {
     "type": "git",
