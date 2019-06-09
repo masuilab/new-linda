@@ -1,28 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import LindaClient from '../linda-client';
 import { Tuple } from '../interfaces';
 
-type Props = {};
+const tupleSpaceName = location.pathname.substring(1);
+const watchingTuple: Tuple = {};
+location.search
+  .substring(1)
+  .split('&')
+  .forEach((value: string) => {
+    const element = value.split('=');
+    watchingTuple[element[0]] = element[1];
+  });
+const lindaClient = new LindaClient();
+lindaClient.connect('http://new-linda.herokuapp.com', tupleSpaceName);
 
-const TupleSpace = (props: Props) => {
-  const tupleSpaceName = location.pathname.substring(1);
-  const watchingTuple: Tuple = {};
-  location.search
-    .substring(1)
-    .split('&')
-    .forEach((value: string) => {
-      const element = value.split('=');
-      watchingTuple[element[0]] = element[1];
-    });
-  const lindaClient = new LindaClient();
+const TupleSpace = () => {
   const [tuples, setTuples] = useState<(Tuple | null)[]>([]);
-  lindaClient.connect('http://new-linda.herokuapp.com', 'masuilab');
   useEffect(() => {
     lindaClient.watch(watchingTuple, resData => {
-      const newTuples = [resData._payload, ...tuples];
-      tuples.push(resData._payload);
-      setTuples(newTuples);
+      setTuples(tuples => [resData._payload, ...tuples]);
     });
   }, []);
   return (
