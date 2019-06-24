@@ -43,7 +43,7 @@ export default class storageClient {
     for (const t of this.tupleSpace) {
       const result = isMatch(t._payload, operation._payload);
       if (result.isMatched) {
-        const resData: LindaResponse = Object.assign(t, {
+        const resData: LindaResponse = Object.assign({}, t, {
           _isMatched: true,
         });
         return resData;
