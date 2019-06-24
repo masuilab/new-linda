@@ -233,11 +233,11 @@ eval("var g;\n\n// This works in non-strict mode\ng = (function() {\n\treturn th
 /*!****************************!*\
   !*** ./src/pages/home.tsx ***!
   \****************************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ \"./node_modules/react-dom/index.js\");\n/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);\n\n\nconst Home = (props) => (react__WEBPACK_IMPORTED_MODULE_0__[\"createElement\"](\"div\", null,\n    react__WEBPACK_IMPORTED_MODULE_0__[\"createElement\"](\"h1\", null, \"Welcome to Linda\"),\n    react__WEBPACK_IMPORTED_MODULE_0__[\"createElement\"](\"a\", { href: \"https://github.com/saji-ryu/Linda/tree/master/modules/Linda-server\" }, \"github\")));\nreact_dom__WEBPACK_IMPORTED_MODULE_1__[\"render\"](react__WEBPACK_IMPORTED_MODULE_0__[\"createElement\"](Home, null), document.getElementById('content'));\n\n\n//# sourceURL=webpack:///./src/pages/home.tsx?");
+eval("\nvar __importStar = (this && this.__importStar) || function (mod) {\n    if (mod && mod.__esModule) return mod;\n    var result = {};\n    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];\n    result[\"default\"] = mod;\n    return result;\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nvar React = __importStar(__webpack_require__(/*! react */ \"./node_modules/react/index.js\"));\nvar ReactDOM = __importStar(__webpack_require__(/*! react-dom */ \"./node_modules/react-dom/index.js\"));\nvar Home = function (props) { return (React.createElement(\"div\", null,\n    React.createElement(\"h1\", null, \"Welcome to Linda\"),\n    React.createElement(\"a\", { href: \"https://github.com/saji-ryu/Linda/tree/master/modules/Linda-server\" }, \"github\"))); };\nReactDOM.render(React.createElement(Home, null), document.getElementById('content'));\n\n\n//# sourceURL=webpack:///./src/pages/home.tsx?");
 
 /***/ })
 

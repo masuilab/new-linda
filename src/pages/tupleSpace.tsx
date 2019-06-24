@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import ReactDOM from 'react-dom';
-import LindaClient from '../linda-client';
-import { Tuple } from '../interfaces';
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
+import LindaClient from "../linda-client";
+import { Tuple } from "../interfaces";
 
 const tupleSpaceName = location.pathname.substring(1);
 const watchingTuple: Tuple = {};
 location.search
   .substring(1)
-  .split('&')
+  .split("&")
   .forEach((value: string) => {
-    const element = value.split('=');
+    const element = value.split("=");
     watchingTuple[element[0]] = element[1];
   });
 const lindaClient = new LindaClient();
-lindaClient.connect('http://new-linda.herokuapp.com', tupleSpaceName);
+lindaClient.connect("http://new-linda.herokuapp.com", tupleSpaceName);
 
 const TupleSpace = () => {
   const [tuples, setTuples] = useState<(Tuple | null)[]>([]);
@@ -25,7 +25,7 @@ const TupleSpace = () => {
   return (
     <div>
       <h1>{`${tupleSpaceName}/${JSON.stringify(watchingTuple)}`}</h1>
-      <h2>{'write'}</h2>
+      <h2>{"write"}</h2>
       <div>
         <button onClick={() => lindaClient.write(watchingTuple)}>
           {JSON.stringify(watchingTuple)}
@@ -34,7 +34,7 @@ const TupleSpace = () => {
       <div>
         {`%curl -d 'tuple=${JSON.stringify(watchingTuple)}' ${location.host}`}
       </div>
-      <h2>{'watch'}</h2>
+      <h2>{"watch"}</h2>
       <div>
         {tuples.map((tuple, index) => {
           return <ul key={index}>{JSON.stringify(tuple)}</ul>;
@@ -44,4 +44,4 @@ const TupleSpace = () => {
   );
 };
 
-ReactDOM.render(<TupleSpace />, document.getElementById('content'));
+ReactDOM.render(<TupleSpace />, document.getElementById("content"));
