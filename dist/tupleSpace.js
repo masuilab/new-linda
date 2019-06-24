@@ -47,7 +47,7 @@ var tupleSpace = /** @class */ (function () {
             wildcard: true,
             delimiter: '::',
             newListener: false,
-            maxListeners: 20,
+            maxListeners: 5,
             verboseMemoryLeak: false,
         });
         this.tupleSpaceName = tupleSpaceName;

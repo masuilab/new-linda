@@ -39,91 +39,90 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var socket_io_client_1 = __importDefault(require("socket.io-client"));
+var axios_1 = __importDefault(require("axios"));
 var LindaClient = /** @class */ (function () {
-    function LindaClient() {
-        this.tupleSpaceName = '';
+    function LindaClient(url, tupleSpaceName) {
+        this.socket = null;
+        this.tupleSpaceName = tupleSpaceName;
+        this.url = url;
     }
-    LindaClient.prototype.connect = function (url, tsName) {
+    LindaClient.prototype.read = function (tuple) {
         return __awaiter(this, void 0, void 0, function () {
+            var readOperation, res;
             return __generator(this, function (_a) {
-                this.socket = socket_io_client_1.default(url);
-                this.tupleSpaceName = tsName;
-                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0:
+                        readOperation = {
+                            _payload: tuple,
+                            _type: 'read',
+                            _where: this.tupleSpaceName,
+                        };
+                        return [4 /*yield*/, axios_1.default.post(this.url, readOperation)];
+                    case 1:
+                        res = _a.sent();
+                        return [2 /*return*/, res.data];
+                }
             });
         });
     };
-    LindaClient.prototype.read = function (tuple) {
-        var _this = this;
-        var readOperation = {
-            _payload: tuple,
-            _where: this.tupleSpaceName,
-            _type: 'read',
-        };
-        return new Promise(function (resolve, reject) {
-            if (_this.socket) {
-                _this.socket.on('_read_response', function (resData) {
-                    resolve(resData);
-                });
-                _this.socket.emit('_operation', readOperation);
-            }
-            else {
-                reject();
-            }
-        });
-    };
     LindaClient.prototype.write = function (tuple) {
-        var _this = this;
-        var writeOperation = {
-            _payload: tuple,
-            _where: this.tupleSpaceName,
-            _type: 'write',
-            _from: tuple._from && typeof tuple._from === 'string'
-                ? tuple._from
-                : undefined,
-        };
-        return new Promise(function (resolve, reject) {
-            if (_this.socket) {
-                _this.socket.on('_write_response', function (resData) {
-                    resolve(resData);
-                });
-                _this.socket.emit('_operation', writeOperation);
-            }
-            else {
-                reject();
-            }
+        return __awaiter(this, void 0, void 0, function () {
+            var writeOperation, res;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        writeOperation = {
+                            _payload: tuple,
+                            _where: this.tupleSpaceName,
+                            _type: 'write',
+                            _from: tuple._from && typeof tuple._from === 'string'
+                                ? tuple._from
+                                : undefined,
+                        };
+                        return [4 /*yield*/, axios_1.default.post(this.url, writeOperation)];
+                    case 1:
+                        res = _a.sent();
+                        return [2 /*return*/, res.data];
+                }
+            });
         });
     };
     LindaClient.prototype.take = function (tuple) {
-        var _this = this;
-        var takeOperation = {
-            _payload: tuple,
-            _where: this.tupleSpaceName,
-            _type: 'take',
-        };
-        return new Promise(function (resolve, reject) {
-            if (_this.socket) {
-                _this.socket.on('_take_response', function (resData) {
-                    resolve(resData);
-                });
-                _this.socket.emit('_operation', takeOperation);
-            }
-            else {
-                reject();
-            }
+        return __awaiter(this, void 0, void 0, function () {
+            var takeOperation, res;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        takeOperation = {
+                            _payload: tuple,
+                            _where: this.tupleSpaceName,
+                            _type: 'take',
+                        };
+                        return [4 /*yield*/, axios_1.default.post(this.url, takeOperation)];
+                    case 1:
+                        res = _a.sent();
+                        return [2 /*return*/, res.data];
+                }
+            });
         });
     };
     LindaClient.prototype.watch = function (tuple, callback) {
+        this.socket = null;
         var watchOperation = {
             _payload: tuple,
             _where: this.tupleSpaceName,
             _type: 'watch',
         };
+        this.socket = socket_io_client_1.default(this.url);
         if (this.socket) {
             this.socket.on('_watch_response', function (resData) {
                 callback(resData);
             });
             this.socket.emit('_operation', watchOperation);
         }
+    };
+    LindaClient.prototype.removeLinstener = function () {
+        this.socket = null;
     };
     LindaClient.prototype.onDisconnected = function (callback) {
         if (this.socket) {

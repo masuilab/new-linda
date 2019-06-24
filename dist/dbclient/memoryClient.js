@@ -87,7 +87,7 @@ var storageClient = /** @class */ (function () {
                     t = _a[_i];
                     result = isMatch_1.default(t._payload, operation._payload);
                     if (result.isMatched) {
-                        resData = Object.assign(t, {
+                        resData = Object.assign({}, t, {
                             _isMatched: true,
                         });
                         return [2 /*return*/, resData];
