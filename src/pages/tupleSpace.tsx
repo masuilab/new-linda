@@ -1,10 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import LindaClient from '../linda-client';
 import { Tuple } from '../interfaces';
 
 const tupleSpaceName = location.pathname.substring(1);
 const watchingTuple: Tuple = {};
+const url =
+  process.env.NODE_ENV === 'development'
+    ? 'http://127.0.0.1:7777'
+    : 'http://new-linda.herokuapp.com';
 location.search
   .substring(1)
   .split('&')
@@ -12,8 +16,7 @@ location.search
     const element = value.split('=');
     watchingTuple[element[0]] = element[1];
   });
-const lindaClient = new LindaClient();
-lindaClient.connect('http://new-linda.herokuapp.com', tupleSpaceName);
+const lindaClient = new LindaClient(url, tupleSpaceName);
 
 const TupleSpace = () => {
   const [tuples, setTuples] = useState<(Tuple | null)[]>([]);

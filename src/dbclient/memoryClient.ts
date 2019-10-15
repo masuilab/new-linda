@@ -1,11 +1,6 @@
-import {
-  IsMuchResponse,
-  Tuple,
-  LindaOperation,
-  TupleInfo,
-  LindaResponse,
-} from '../interfaces';
+import { LindaOperation, TupleInfo, LindaResponse } from '../interfaces';
 import memoryDB from '../db/memoryDB';
+import isMatch from '../util/isMatch';
 
 export default class storageClient {
   tupleSpace: Array<TupleInfo>;
@@ -31,7 +26,7 @@ export default class storageClient {
 
   async insert(operation: LindaOperation): Promise<LindaResponse> {
     const time = Date.now();
-    const insertData: LindaResponse= {
+    const insertData: LindaResponse = {
       _time: time,
       _where: this.tupleSpaceName,
       _payload: operation._payload,
@@ -46,16 +41,16 @@ export default class storageClient {
 
   async get(operation: LindaOperation): Promise<LindaResponse> {
     for (const t of this.tupleSpace) {
-      let result = this.isMuch(t._payload, operation._payload);
-      if (result.isMuched) {
-        let resData: LindaResponse = Object.assign(t, {
-          _isMuched: true,
+      const result = isMatch(t._payload, operation._payload);
+      if (result.isMatched) {
+        const resData: LindaResponse = Object.assign({}, t, {
+          _isMatched: true,
         });
         return resData;
       }
     }
     return {
-      _isMuched: false,
+      _isMatched: false,
       _id: null,
       _payload: null,
       _time: null,
@@ -65,16 +60,5 @@ export default class storageClient {
 
   async delete(id: number): Promise<void> {
     this.tupleSpace.splice(id, 1);
-  }
-
-  isMuch(targetTuple: Tuple, searchTuple: Tuple): IsMuchResponse {
-    for (let operationKey in searchTuple) {
-      if (!targetTuple[operationKey]) {
-        return { isMuched: false, res: null };
-      } else if (targetTuple[operationKey] != searchTuple[operationKey]) {
-        return { isMuched: false, res: null };
-      }
-    }
-    return { isMuched: true, res: targetTuple };
   }
 }

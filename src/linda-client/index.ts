@@ -6,34 +6,29 @@ import {
   LindaOperation,
   LindaResponse,
 } from '../interfaces';
+import axios from 'axios';
 
 export default class LindaClient {
-  socket?: SocketIOClient.Socket;
+  socket: SocketIOClient.Socket | null;
   tupleSpaceName: string;
-  constructor() {
-    this.tupleSpaceName = '';
+  url: string;
+  constructor(url: string, tupleSpaceName: string) {
+    this.socket = null;
+    this.tupleSpaceName = tupleSpaceName;
+    this.url = url;
   }
 
-  async connect(url: string, tsName: string) {
-    this.socket = io(url);
-    this.tupleSpaceName = tsName;
-  }
-
-  async read(tuple: Tuple) {
-    let readOperation: LindaOperation = {
+  async read(tuple: Tuple): Promise<LindaResponse> {
+    const readOperation: LindaOperation = {
       _payload: tuple,
-      _where: this.tupleSpaceName,
       _type: 'read',
+      _where: this.tupleSpaceName,
     };
-    if (this.socket) {
-      this.socket.on('_read_response', (resData: LindaResponse) => {
-        return resData;
-      });
-      await this.socket.emit('_operation', readOperation);
-    }
+    const res = await axios.post(this.url, readOperation);
+    return res.data;
   }
 
-  async write(tuple: Tuple) {
+  async write(tuple: Tuple): Promise<LindaResponse> {
     let writeOperation: LindaOperation = {
       _payload: tuple,
       _where: this.tupleSpaceName,
@@ -43,40 +38,38 @@ export default class LindaClient {
           ? tuple._from
           : undefined,
     };
-    if (this.socket) {
-      this.socket.on('_write_response', (resData: LindaResponse) => {
-        return resData;
-      });
-      await this.socket.emit('_operation', writeOperation);
-    }
+    const res = await axios.post(this.url, writeOperation);
+    return res.data;
   }
 
-  async take(tuple: Tuple) {
+  async take(tuple: Tuple): Promise<LindaResponse> {
     let takeOperation: LindaOperation = {
       _payload: tuple,
       _where: this.tupleSpaceName,
       _type: 'take',
     };
-    if (this.socket) {
-      this.socket.on('_take_response', (resData: LindaResponse) => {
-        return resData;
-      });
-      await this.socket.emit('_operation', takeOperation);
-    }
+    const res = await axios.post(this.url, takeOperation);
+    return res.data;
   }
 
   watch(tuple: Tuple, callback: Callback) {
+    this.socket = null;
     let watchOperation: LindaOperation = {
       _payload: tuple,
       _where: this.tupleSpaceName,
       _type: 'watch',
     };
+    this.socket = io(this.url);
     if (this.socket) {
       this.socket.on('_watch_response', (resData: LindaResponse) => {
         callback(resData);
       });
       this.socket.emit('_operation', watchOperation);
     }
+  }
+
+  removeLinstener() {
+    this.socket = null;
   }
 
   onDisconnected(callback: ConnectCallback) {

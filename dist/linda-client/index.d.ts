@@ -1,12 +1,13 @@
-import { Tuple, Callback, ConnectCallback } from '../interfaces';
+import { Tuple, Callback, ConnectCallback, LindaResponse } from '../interfaces';
 export default class LindaClient {
-    socket?: SocketIOClient.Socket;
+    socket: SocketIOClient.Socket | null;
     tupleSpaceName: string;
-    constructor();
-    connect(url: string, tsName: string): Promise<void>;
-    read(tuple: Tuple): Promise<void>;
-    write(tuple: Tuple): Promise<void>;
-    take(tuple: Tuple): Promise<void>;
+    url: string;
+    constructor(url: string, tupleSpaceName: string);
+    read(tuple: Tuple): Promise<LindaResponse>;
+    write(tuple: Tuple): Promise<LindaResponse>;
+    take(tuple: Tuple): Promise<LindaResponse>;
     watch(tuple: Tuple, callback: Callback): void;
+    removeLinstener(): void;
     onDisconnected(callback: ConnectCallback): void;
 }

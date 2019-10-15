@@ -66,7 +66,5 @@ app.use(function(
 app.use('/', routeIndex);
 app.set('linda', linda);
 
-console.log(linda.tupleSpaces || 'none');
-
 export { linda };
 export default app;

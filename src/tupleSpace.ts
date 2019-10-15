@@ -1,5 +1,5 @@
 import {
-  IsMuchResponse,
+  IsMatchResponse,
   LindaCallback,
   LindaOperation,
   LindaResponse,
@@ -7,6 +7,7 @@ import {
 } from './interfaces';
 import { EventEmitter2 } from 'eventemitter2';
 import storageClient from './dbclient/memoryClient';
+import isMatch from './util/isMatch';
 
 export default class tupleSpace {
   emitter: EventEmitter2;
@@ -17,7 +18,7 @@ export default class tupleSpace {
       wildcard: true,
       delimiter: '::',
       newListener: false,
-      maxListeners: 20,
+      maxListeners: 5,
       verboseMemoryLeak: false,
     });
     this.tupleSpaceName = tupleSpaceName;
@@ -33,7 +34,6 @@ export default class tupleSpace {
     callback: LindaCallback,
   ): Promise<void> {
     const resData: LindaResponse = await this.storage.insert(operation);
-    // this.emitter.emit("_writeData", operation);
     this.emitter.emit('_writeData', resData);
     callback(resData);
   }
@@ -51,7 +51,7 @@ export default class tupleSpace {
     callback: LindaCallback,
   ): Promise<void> {
     let resData: LindaResponse = await this.storage.get(operation);
-    if (resData._isMuched) {
+    if (resData._isMatched) {
       await this.storage.delete(resData._id);
     }
     callback(resData);
@@ -59,11 +59,11 @@ export default class tupleSpace {
 
   watch(operation: LindaOperation, callback: LindaCallback): void {
     this.emitter.on('_writeData', (eventTuple: LindaMatchedResponse) => {
-      let result: IsMuchResponse = this.storage.isMuch(
+      let result: IsMatchResponse = isMatch(
         eventTuple._payload,
         operation._payload,
       );
-      if (result.isMuched && result.res) {
+      if (result.isMatched && result.res) {
         const resData: LindaMatchedResponse = {
           _time: Date.now(),
           _payload: result.res,
